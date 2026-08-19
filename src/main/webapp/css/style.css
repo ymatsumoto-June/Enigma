@@ -1,0 +1,52 @@
+body {
+	background-color: #333;
+	color: greenyellow;
+	font-family: monospace;
+}
+
+header {
+	text-align: center;
+}
+
+.form-group .form-control {
+	background-color: rgba(0, 0, 0, .85);
+	color: greenyellow;
+	border: 3px #333;
+	box-shadow: 5px 5px 5px 0 greenyellow;
+	font-family: monospace;
+}
+
+.form-group .form-control:focus {
+	background-color: rgba(0, 0, 0, .95);
+	color: greenyellow;
+	border-color: greenyellow;
+	box-shadow: 0 0 8px rgba(173, 255, 47, 0.5);
+}
+
+.btn {
+	margin: 0 10px;
+	background-color: rgba(0, 0, 0, .5);
+	color: greenyellow;
+	border-color: greenyellow;
+	border-radius: 10px;
+	box-shadow: 5px 5px 10px 0 greenyellow;
+}
+
+.btn:hover {
+  box-shadow: unset;
+  transform: translateY(4px);
+}
+
+.contact {
+	text-align: right;
+}
+
+a {
+	color: greenyellow;
+}
+
+@media only screen and (max-width:600px) {
+	textarea.form-control {
+		height: 100px;
+	}
+}

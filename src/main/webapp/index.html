@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	
+	<title>Enigma Maker</title>
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" 
+	crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 
+	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" 
+	crossorigin="anonymous">
+
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<div class="container">
+		<header>
+			<h1>暗号文メーカー</h1>
+		</header>
+		
+		<div class="form-group">
+			<label for="list">暗号リスト</label>
+			<select id="list" name="list" class="form-control" onchange="changeEnigma()">
+				<option value="">選択してください</option>
+				<option value="original">オリジナル</option>
+				<option value="caesar">シーザー暗号</option>
+				<option value="rot13">ROT13</option>
+				<option value="vigenere">ヴィジュネル暗号</option>
+			</select>
+		</div>
+		
+		<div class="form-group">
+			<label for="key" id="labelKey" style="display: none;">暗号鍵を入力</label>
+			<input type="text" id="key" class="form-control" placeholder="アルファベットを入力" style="display: none;">
+		</div>
+
+		<div class="row">
+			<div class="form-group left col-sm-6">
+				<label for="sentence" id="leftLabel">変換前の平文を入力</label>
+				<textarea name="words" id="sentence" rows="10" class="form-control"></textarea>
+			</div>
+
+			<div class="form-group right col-sm-6">
+				<label for="enigma" id="rightLabel">変換後の文章</label>
+				<textarea name="words" id="enigma" rows="10" class="form-control"></textarea>
+			</div>
+		</div>
+		
+		<div class="button">
+			<button onclick="" id="btn-action" class="btn">暗号化する</button>
+		</div>
+		
+		<div class="form-group checkbox">
+			<label for="change"><input type="checkbox" id="change">動作切り替え</label>
+		</div>
+		
+		<div class="contact">
+			<a href="form.html">お問い合わせはこちら</a>
+		</div>
+	</div>
+	
+	<script>
+		var line;
+		var str;
+		var enigma;
+		var words;
+		var newWords;
+		
+		function toEnigma() {
+			line = document.getElementById('sentence');
+			str = line.value;
+			
+			words = new Array(str.length);
+			newWords = new Array(str.length);
+			
+			for (var i = 0; i < str.length; i++) {
+				words[i] = str.charCodeAt(i) + str.length;
+				newWords[i] = String.fromCharCode(words[i]);
+			}
+			
+			enigma = document.getElementById('enigma');
+			enigma.value = newWords.join('');
+		};
+		
+		function fromEnigma() {
+			enigma = document.getElementById('enigma');
+			str = enigma.value;
+						
+			words = new Array(str.length);
+			newWords = new Array(str.length);
+						
+			for (var i = 0; i < str.length; i++) {
+				words[i] = str.charCodeAt(i) - str.length;
+				newWords[i] = String.fromCharCode(words[i]);
+			}
+						
+			line = document.getElementById('sentence');
+			line.value = newWords.join('');
+		};
+		
+		function toCaesar() {
+			line = document.getElementById('sentence');
+			str = line.value;
+
+			words = new Array(str.length);
+			newWords = new Array(str.length);
+			
+			for (var i = 0; i < str.length; i++) {
+				words[i] = str.charCodeAt(i);
+				
+				if (words[i] >= 65 && words[i] <= 90) {
+					if (words[i] >= 88) {
+						words[i] -= 26;
+					}
+					words[i] += 3;
+				} else if (words[i] >= 97 && words[i] <= 122) {
+					if (words[i] >= 120) {
+						words[i] -= 26;
+					}
+					words[i] += 3;
+				}
+				newWords[i] = String.fromCharCode(words[i]);
+			}
+
+			enigma = document.getElementById('enigma');
+			enigma.value = newWords.join('');
+		};
+		
+		function fromCaesar() {
+			enigma = document.getElementById('enigma');
+			str = enigma.value;
+
+			words = new Array(str.length);
+			newWords = new Array(str.length);
+			
+			for (var i = 0; i < str.length; i++) {
+				words[i] = str.charCodeAt(i);
+				
+				if (words[i] >= 65 && words[i] <= 90) {
+					if (words[i] <= 67) {
+						words[i] += 26;
+					}
+					words[i] -= 3;
+				} else if (words[i] >= 97 && words[i] <= 122) {
+					if (words[i] <= 99) {
+						words[i] += 26;
+					}
+					words[i] -= 3;
+				}
+				newWords[i] = String.fromCharCode(words[i]);
+			}
+
+			line = document.getElementById('sentence');
+			line.value = newWords.join('');
+		};
+		
+		function toRot13() {
+			line = document.getElementById('sentence');
+			str = line.value;
+
+			words = new Array(str.length);
+			newWords = new Array(str.length);
+			
+			for (var i = 0; i < str.length; i++) {
+				words[i] = str.charCodeAt(i);
+				
+				if (words[i] >= 65 && words[i] <= 90) {
+					if (words[i] >= 78) {
+						words[i] -= 26;
+					}
+					words[i] += 13;
+				} else if (words[i] >= 97 && words[i] <= 122) {
+					if (words[i] >= 110) {
+						words[i] -= 26;
+					}
+					words[i] += 13;
+				}
+				newWords[i] = String.fromCharCode(words[i]);
+			}
+
+			enigma = document.getElementById('enigma');
+			enigma.value = newWords.join('');
+		};
+
+		function fromRot13() {
+			enigma = document.getElementById('enigma');
+			str = enigma.value;
+
+			words = new Array(str.length);
+			newWords = new Array(str.length);
+			
+			for (var i = 0; i < str.length; i++) {
+				words[i] = str.charCodeAt(i);
+				
+				if (words[i] >= 65 && words[i] <= 90) {
+					if (words[i] <= 77) {
+						words[i] += 26;
+					}
+					words[i] -= 13;
+				} else if (words[i] >= 97 && words[i] <= 122) {
+					if (words[i] <= 109) {
+						words[i] += 26;
+					}
+					words[i] -= 13;
+				}
+				newWords[i] = String.fromCharCode(words[i]);
+			}
+
+			line = document.getElementById('sentence');
+			line.value = newWords.join('');
+		};
+		
+		function toVigenere() {
+			var key;
+			var keyValue;
+			var j = 0;
+			
+			line = document.getElementById('sentence');
+			str = line.value;
+			key = document.getElementById('key');
+			keyValue = key.value;
+
+			words = new Array(str.length);
+			newWords = new Array(str.length);
+
+			for (var i = 0; i < str.length; i++) {
+				var numOfNewWords;
+				
+				words[i] = str.charCodeAt(i);
+				numOfNewWords = (words[i] + keyValue.charCodeAt(j) - 2 * 65) % 26 + 65;
+				
+				newWords[i] = String.fromCharCode(numOfNewWords);
+				
+				j++;
+				if (j === keyValue.length) {
+					j = 0;
+				}
+			}
+
+			enigma = document.getElementById('enigma');
+			enigma.value = newWords.join('');
+		};
+		
+		function fromVigenere() {
+			var key;
+			var keyValue;
+			var j = 0;
+			
+			enigma = document.getElementById('enigma');
+			str = enigma.value;
+			key = document.getElementById('key');
+			keyValue = key.value;
+
+			words = new Array(str.length);
+			newWords = new Array(str.length);
+
+			for (var i = 0; i < str.length; i++) {
+				var numOfNewWords;
+				
+				words[i] = str.charCodeAt(i);
+				numOfNewWords = (words[i] - keyValue.charCodeAt(j) + 26) % 26 + 65;
+				
+				newWords[i] = String.fromCharCode(numOfNewWords);
+				
+				j++;
+				if (j === keyValue.length) {
+					j = 0;
+				}
+			}
+
+			line = document.getElementById('sentence');
+			line.value = newWords.join('');
+		};
+		
+		function changeEnigma() {
+			var list;
+			var buttonAction;
+			var explanation;
+			var sentence;
+			
+			list = document.getElementById('list');
+			var value = list.value;
+			buttonAction = document.getElementById('btn-action');
+			
+			var display = document.getElementById('labelKey');
+			display.style.display = 'none';
+
+			display = document.getElementById('key');
+			display.style.display = 'none';
+			
+			if (changeAction.checked) {
+				if (value === 'original') {
+					buttonAction.onclick = fromEnigma;
+				} else if (value === 'caesar') {
+					buttonAction.onclick = fromCaesar;
+				} else if (value === 'rot13') {
+					buttonAction.onclick = fromRot13;
+				} else if (value === 'vigenere') {
+					buttonAction.onclick = fromVigenere;
+					display = document.getElementById('labelKey');
+					display.style.display = 'block';
+					
+					display = document.getElementById('key');
+					display.style.display = 'block';
+				}
+			} else {
+				if (value === 'original') {
+					buttonAction.onclick = toEnigma;
+				} else if (value === 'caesar') {
+					buttonAction.onclick = toCaesar;
+				} else if (value === 'rot13') {
+					buttonAction.onclick = toRot13;
+				} else if (value === 'vigenere') {
+					buttonAction.onclick = toVigenere;
+					display = document.getElementById('labelKey');
+					display.style.display = 'block';
+
+					display = document.getElementById('key');
+					display.style.display = 'block';
+				}
+			}
+		};
+				
+		function changeTextarea() {
+			var check;
+			var temp;
+			var buttonAction;
+			var labelL;
+			var labelR;
+			var list;
+			var value;
+			
+			list = document.getElementById('list');
+			value = list.value;
+			
+			if (changeAction.checked) {
+				check = document.getElementById('sentence');
+				temp = document.getElementById('enigma');
+				buttonAction = document.getElementById('btn-action');
+				labelL = document.getElementById('leftLabel');
+				labelR = document.getElementById('rightLabel');
+				
+				temp.id = 'null';
+				check.id = 'enigma';
+				temp.id = 'sentence';
+
+				buttonAction.textContent = '復号化する';
+
+				if (value === 'original') {
+					buttonAction.onclick = fromEnigma;
+				} else if (value === 'caesar') {
+					buttonAction.onclick = fromCaesar;
+				} else if (value === 'rot13') {
+					buttonAction.onclick = fromRot13;
+				} else if (value === 'vigenere') {
+					buttonAction.onclick = fromVigenere;
+				}
+				
+				labelL.textContent = '変換後の文章を入力';
+				labelR.textContent = '変換前の平文';
+			} else {
+				check = document.getElementById('enigma');
+				temp = document.getElementById('sentence');
+				buttonAction = document.getElementById('btn-action');
+				labelL = document.getElementById('leftLabel');
+				labelR = document.getElementById('rightLabel');
+				
+				temp.id = 'null';
+				check.id = 'sentence';
+				temp.id = 'enigma';
+				
+				buttonAction.textContent = '暗号化する';
+				
+				if (value === 'original') {
+					buttonAction.onclick = toEnigma;
+				} else if (value === 'caesar') {
+					buttonAction.onclick = toCaesar;
+				} else if (value === 'rot13') {
+					buttonAction.onclick = toRot13;
+				} else if (value === 'vigenere') {
+					buttonAction.onclick = toVigenere;
+				}
+				
+				labelL.textContent = '変換前の平文を入力';
+				labelR.textContent = '変換後の文章';
+			}
+		};
+		
+		var changeAction = document.getElementById('change');
+		changeAction.addEventListener('change', changeTextarea);
+	</script>
+
+</body>
+</html>
