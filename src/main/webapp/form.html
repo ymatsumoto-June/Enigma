@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お問い合わせ & 暗号追加リクエスト | ENIGMA CIPHER SUITE</title>
+  
+  <!-- Font & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .form-container {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .form-card {
+      position: relative;
+      overflow: hidden;
+    }
+    .form-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-green));
+    }
+    .back-btn-container {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container form-container">
+    <div class="back-btn-container">
+      <a href="index.html" class="btn-secondary-cyber" style="text-decoration: none;">
+        <i class="fa-solid fa-arrow-left"></i> 暗号文ターミナルに戻る
+      </a>
+    </div>
+
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-badge">
+        <span class="status-dot"></span>
+        <span>Secure Feedback Channel</span>
+      </div>
+      <h1 class="app-title">COMMUNICATION <span class="accent">PORTAL</span></h1>
+      <p class="subtitle">暗号アルゴリズムの追加リクエストや改善提案をお送りください</p>
+    </header>
+
+    <!-- Feedback Form Card -->
+    <div class="glass-panel form-card">
+      <form id="contact-form" onsubmit="handleFormSubmit(event)">
+        <div class="form-group">
+          <label class="field-label" for="name">
+            <span><i class="fa-solid fa-user"></i> お名前 / コードネーム</span>
+            <span class="badge">必須</span>
+          </label>
+          <input type="text" id="name" name="name" class="form-control" placeholder="例）Alan Turing / 山田 太郎" required>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="job">
+            <span><i class="fa-solid fa-briefcase"></i> ご職業 / 所属</span>
+          </label>
+          <select id="job" name="job" class="form-control">
+            <option value="">選択してください</option>
+            <option value="暗号研究者 / セキュリティエンジニア">暗号研究者 / セキュリティエンジニア</option>
+            <option value="ソフトウェア開発者">ソフトウェア開発者</option>
+            <option value="会社員">会社員</option>
+            <option value="学生 / 研究員">学生 / 研究員</option>
+            <option value="その他">その他</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="addEnigma">
+            <span><i class="fa-solid fa-microchip"></i> 追加してほしい暗号・機能</span>
+            <span class="badge">任意</span>
+          </label>
+          <input type="text" id="addEnigma" name="addEnigma" class="form-control" placeholder="例）RSA暗号、AES共通鍵暗号、プレイフェア暗号、ステガノグラフィなど">
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="priority">
+            <span><i class="fa-solid fa-gauge-high"></i> 要望の重要度</span>
+          </label>
+          <select id="priority" name="priority" class="form-control">
+            <option value="normal">通常 (Normal)</option>
+            <option value="high">高 (High - ぜひ使いたい)</option>
+            <option value="critical">緊急 (Critical - 研究・業務で必要)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="sentence">
+            <span><i class="fa-solid fa-comment-dots"></i> ご意見・ご要望の詳細</span>
+            <span class="badge">必須</span>
+          </label>
+          <textarea name="sentence" id="sentence" rows="6" class="editor-textarea" placeholder="UIの使い勝手、新機能のアイデア、暗号化の不具合報告などをご自由にご記入ください..." required></textarea>
+        </div>
+
+        <div style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 14px;">
+          <button type="reset" class="btn-secondary-cyber">
+            <i class="fa-solid fa-eraser"></i> リセット
+          </button>
+          <button type="submit" class="btn-cyber" id="submit-btn">
+            <i class="fa-solid fa-paper-plane"></i> メッセージを送信
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Success Modal/Banner (Hidden initially) -->
+    <div id="success-banner" class="glass-panel" style="display: none; border-color: var(--neon-green); text-align: center; padding: 30px;">
+      <i class="fa-solid fa-circle-check" style="font-size: 3rem; color: var(--neon-green); margin-bottom: 16px;"></i>
+      <h2 style="font-family: var(--font-mono); color: #fff; margin-bottom: 10px;">送信が完了しました</h2>
+      <p style="color: var(--text-muted); margin-bottom: 20px;">貴重なご意見・暗号リクエストをいただきありがとうございます。システム管理者・暗号開発チームへ伝送されました。</p>
+      <a href="index.html" class="btn-cyber" style="text-decoration: none; display: inline-flex;">
+        <i class="fa-solid fa-arrow-left"></i> 暗号文ターミナルに戻る
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div>
+        <span>&copy; 2026 ENIGMA CIPHER SUITE - Cryptographic Defense & Analysis Engine</span>
+      </div>
+      <div>
+        <a href="index.html" class="footer-link">
+          <i class="fa-solid fa-terminal"></i> ターミナルへ
+        </a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    function showToast(message, isError = false) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${isError ? 'error' : ''}`;
+      toast.innerHTML = `
+        <i class="fa-solid ${isError ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 送信中...';
+
+      const formData = {
+        name: document.getElementById('name').value,
+        job: document.getElementById('job').value,
+        addEnigma: document.getElementById('addEnigma').value,
+        priority: document.getElementById('priority').value,
+        sentence: document.getElementById('sentence').value,
+        timestamp: new Date().toISOString()
+      };
+
+      // Save to localStorage as a simulated backend dispatch
+      try {
+        const feedbackList = JSON.parse(localStorage.getItem('enigma_feedbacks') || '[]');
+        feedbackList.push(formData);
+        localStorage.setItem('enigma_feedbacks', JSON.stringify(feedbackList));
+      } catch (e) {
+        console.error(e);
+      }
+
+      setTimeout(() => {
+        document.querySelector('.form-card').style.display = 'none';
+        document.getElementById('success-banner').style.display = 'block';
+        showToast('ご意見が正常に送信されました！');
+      }, 800);
+    }
+  </script>
+</body>
+</html>
